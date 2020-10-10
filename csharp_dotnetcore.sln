@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CardsBot", "CardsBot\CardsBot.csproj", "{4F3B3AE5-D5E9-4701-817D-D5EF5D5DB1C7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmptyBot", "EmptyBot\EmptyBot\EmptyBot.csproj", "{ED642E21-5020-44E5-B252-4CE2A594ADE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmptyBot", "EmptyBot\EmptyBot.csproj", "{E2EDA81A-3A9E-4694-A76D-723BBE0FB105}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{4F3B3AE5-D5E9-4701-817D-D5EF5D5DB1C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F3B3AE5-D5E9-4701-817D-D5EF5D5DB1C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F3B3AE5-D5E9-4701-817D-D5EF5D5DB1C7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ED642E21-5020-44E5-B252-4CE2A594ADE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ED642E21-5020-44E5-B252-4CE2A594ADE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ED642E21-5020-44E5-B252-4CE2A594ADE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ED642E21-5020-44E5-B252-4CE2A594ADE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2EDA81A-3A9E-4694-A76D-723BBE0FB105}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2EDA81A-3A9E-4694-A76D-723BBE0FB105}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2EDA81A-3A9E-4694-A76D-723BBE0FB105}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2EDA81A-3A9E-4694-A76D-723BBE0FB105}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

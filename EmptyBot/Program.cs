@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace EmptyBotAdaptive1
+namespace EmptyBot
 {
     public class Program
     {

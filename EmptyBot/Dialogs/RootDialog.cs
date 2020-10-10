@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+using System.Collections.Generic;
 using Microsoft.Bot.Builder.Dialogs.Adaptive;
 using Microsoft.Bot.Builder.Dialogs.Adaptive.Actions;
 using Microsoft.Bot.Builder.Dialogs.Adaptive.Conditions;
 
-namespace EmptyBotAdaptive1.Dialogs
+namespace EmptyBot.Dialogs
 {
     public class RootDialog : AdaptiveDialog
     {

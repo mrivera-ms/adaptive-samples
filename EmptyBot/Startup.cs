@@ -1,25 +1,19 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
-//
-// Generated with Bot Builder V4 SDK Template for Visual Studio EmptyBot v4.10.3
 
-using EmptyBotAdaptive1.Dialogs;
+using EmptyBot.Bots;
+using EmptyBot.Dialogs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Bot.Builder;
-using Microsoft.Bot.Builder.AI.Luis;
-using Microsoft.Bot.Builder.AI.QnA;
 using Microsoft.Bot.Builder.BotFramework;
-using Microsoft.Bot.Builder.Dialogs;
-using Microsoft.Bot.Builder.Dialogs.Adaptive;
-using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Integration.AspNet.Core;
 using Microsoft.Bot.Connector.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace EmptyBotAdaptive1
+namespace EmptyBot
 {
     public class Startup
     {
@@ -74,8 +68,6 @@ namespace EmptyBotAdaptive1
                 {
                     endpoints.MapControllers();
                 });
-
-            // app.UseHttpsRedirection();
         }
     }
 }

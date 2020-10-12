@@ -1,0 +1,58 @@
+> Language Generation definition file. 
+> See https://aka.ms/language-generation to learn more
+
+# WelcomeMessage
+- Welcome to your friendly bot! We are up and running!
+
+# ShowSelection(selection)
+- You selected ${selection}
+- ${selection} is a great choice!
+
+# SampleText
+- Here is a sample of more text in your selected language. Type 'LANG' anytime to change the language again.
+
+# AdaptiveCard
+[Activity
+    Attachments = ${json(AdaptiveCard.Definition())}
+]
+
+# AdaptiveCard.Definition
+- ${json(fromFile('../Cards/WelcomeCard.json'))}
+
+# LanguageChoicePrompt
+[Activity
+    Text = ${LanguageChoicePrompt.Text()}
+    SuggestedActions = ${EnglishCard()} | ${SpanishCard()} | ${FrenchCard()} | ${ItalianCard()}
+]
+
+# LanguageChoicePrompt.Text
+- Choose your language
+- What language would you like to use?
+
+# EnglishCard
+[CardAction
+    title = English
+    type = imBack
+    value = en
+]
+
+# SpanishCard
+[CardAction
+    title = Espanol
+    type = imBack
+    value = es
+]
+
+# ItalianCard
+[CardAction
+    title = Italiano
+    type = imBack
+    value = it
+]
+
+# FrenchCard
+[CardAction
+    title = Francais
+    type = imBack
+    value = fr
+]

@@ -44,7 +44,7 @@ namespace WelcomeBot.Dialogs
                         {
                             Property = "user.LanguagePreference",
                             Prompt = new ActivityTemplate("${LanguageChoicePrompt()}"),
-                            Value = "${user.LanguagePreference}",
+                            //Value = "${user.LanguagePreference}",
                             AlwaysPrompt = true
                         },
                         new SendActivity("Excellent: ${user.LanguagePreference} is a great choice."),

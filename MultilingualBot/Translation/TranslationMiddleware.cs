@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Schema;
+using MultilingualBot.Translation;
 
 namespace Microsoft.BotBuilderSamples.Translation
 {
@@ -17,23 +18,25 @@ namespace Microsoft.BotBuilderSamples.Translation
     /// </summary>
     public class TranslationMiddleware : IMiddleware
     {
-        private readonly MicrosoftTranslator _translator;
+        //private readonly MicrosoftTranslator _translator;
         private readonly IStatePropertyAccessor<string> _languageStateProperty;
+        private readonly MessageActivityTranslator _messageActivityTranslator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TranslationMiddleware"/> class.
         /// </summary>
         /// <param name="translator">Translator implementation to be used for text translation.</param>
         /// <param name="userState">The UserState that contains the target language.</param>
-        public TranslationMiddleware(MicrosoftTranslator translator, UserState userState)
+        public TranslationMiddleware(MicrosoftTranslator translator, UserState userState, MessageActivityTranslator activityTranslator)
         {
-            _translator = translator ?? throw new ArgumentNullException(nameof(translator));
+           // _translator = translator ?? throw new ArgumentNullException(nameof(translator));
             if(userState == null)
             {
                 throw new ArgumentNullException(nameof(userState));
             }
 
             _languageStateProperty = userState.CreateProperty<string>("LanguagePreference");
+            _messageActivityTranslator = activityTranslator;
         }
 
         /// <summary>
@@ -57,20 +60,20 @@ namespace Microsoft.BotBuilderSamples.Translation
                 // This translates incoming messages from the user language to the default language that the bot understands.
                 if (turnContext.Activity.Type == ActivityTypes.Message)
                 {
-                    turnContext.Activity.Text = await _translator.TranslateAsync(turnContext.Activity.Text, TranslationSettings.DefaultLanguage, cancellationToken);
+                    await _messageActivityTranslator.TranslateTextAsync(turnContext.Activity.Text, TranslationSettings.DefaultLanguage, cancellationToken);
                 }
             }
 
             turnContext.OnSendActivities(async (newContext, activities, nextSend) =>
             {
                 (translate, language) = await ShouldTranslateAsync(turnContext, cancellationToken);
-
                 if (translate)
                 {
                     var tasks = new List<Task>();
-                    foreach (var currentActivity in activities.Where(a => a.Type == ActivityTypes.Message))
+                    foreach (var activity in activities)
                     {
-                        tasks.Add(TranslateMessageActivityAsync(currentActivity.AsMessageActivity(), language, cancellationToken));
+                        tasks.Add(_messageActivityTranslator.TranslateActivityAsync(activity, language,
+                            cancellationToken));
                     }
 
                     if (tasks.Any())
@@ -91,7 +94,7 @@ namespace Microsoft.BotBuilderSamples.Translation
                 {
                     if (translate)
                     {
-                        await TranslateMessageActivityAsync(activity.AsMessageActivity(), language, cancellationToken);
+                        await _messageActivityTranslator.TranslateMessageActivityAsync(activity.AsMessageActivity(), language, cancellationToken);
                     }
                 }
 
@@ -101,13 +104,6 @@ namespace Microsoft.BotBuilderSamples.Translation
             await next(cancellationToken).ConfigureAwait(false);
         }
 
-        private async Task TranslateMessageActivityAsync(IMessageActivity activity, string targetLocale, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (activity.Type == ActivityTypes.Message)
-            {
-                activity.Text = await _translator.TranslateAsync(activity.Text, targetLocale, cancellationToken);
-            }
-        }
 
         private async Task<(bool, string)> ShouldTranslateAsync(ITurnContext turnContext, CancellationToken cancellationToken = default(CancellationToken))
         {

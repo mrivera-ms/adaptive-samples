@@ -7,8 +7,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.1" />
-    <PackageReference Include="Microsoft.Bot.Builder.AI.Luis" Version="4.10.3" />
-    <PackageReference Include="Microsoft.Bot.Builder.AI.QnA" Version="4.10.3" />
     <PackageReference Include="Microsoft.Bot.Builder.Dialogs.Adaptive" Version="4.10.3" />
     <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" Version="4.10.3" />
   </ItemGroup>
@@ -21,6 +19,11 @@
 
     <ItemGroup>
       <Folder Include="Translation\Model\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\src\botbuilder-dotnet\libraries\integration\Microsoft.Bot.Builder.Integration.AspNet.Core\Microsoft.Bot.Builder.Integration.AspNet.Core.csproj" />
+      <ProjectReference Include="..\..\..\src\botbuilder-dotnet\libraries\Microsoft.Bot.Builder.Dialogs.Adaptive\Microsoft.Bot.Builder.Dialogs.Adaptive.csproj" />
     </ItemGroup>
 
 </Project>

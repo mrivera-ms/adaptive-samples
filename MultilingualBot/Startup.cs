@@ -11,6 +11,7 @@ using Microsoft.BotBuilderSamples.Translation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MultilingualBot.Translation;
 using WelcomeBot.Bots;
 using WelcomeBot.Dialogs;
 
@@ -56,6 +57,8 @@ namespace WelcomeBot
 
             // Create the Translation Middleware that will be added to the middleware pipeline in the AdapterWithErrorHandler
             services.AddSingleton<TranslationMiddleware>();
+
+            services.AddSingleton<MessageActivityTranslator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

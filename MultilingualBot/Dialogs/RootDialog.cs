@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System.IO;
+using AdaptiveExpressions.Properties;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Adaptive;
@@ -18,14 +19,9 @@ namespace WelcomeBot.Dialogs
     public class RootDialog : AdaptiveDialog
     {
         private Templates _templates;
-        private readonly UserState _userState;
-        private IStatePropertyAccessor<string> _languagePreference;
 
         public RootDialog() : base(nameof(RootDialog))
         {
-            //_userState = userState ?? throw new NullReferenceException(nameof(userState));
-            //_languagePreference = userState.CreateProperty<string>("LanguagePreference");
-
             string[] paths = { ".", "Dialogs", $"RootDialog.lg" };
             var fullPath = Path.Combine(paths);
             _templates = Templates.ParseFile(fullPath);
@@ -44,25 +40,20 @@ namespace WelcomeBot.Dialogs
                         {
                             Property = "user.LanguagePreference",
                             Prompt = new ActivityTemplate("${LanguageChoicePrompt()}"),
-                            //Value = "${user.LanguagePreference}",
-                            AlwaysPrompt = true
+                            AlwaysPrompt = true,
+                            InvalidPrompt = new ActivityTemplate("Sorry, I don't understand that. Please select one of the values."),
+                            Validations = new List<BoolExpression>()
+                            {
+                                new BoolExpression("this.value == 'en' || this.value == 'it' || this.value == 'fr' || this.value == 'es'")
+                            }
                         },
                         new SendActivity("Excellent: ${user.LanguagePreference} is a great choice."),
-                        //new CodeAction(SetLanguagePreferenceToUserState),
-                        new SendActivity("${SampleText()}"),
                     }
                 }
             };
 
             Generator = new TemplateEngineLanguageGenerator(_templates);
         }
-
-        //private async Task<DialogTurnResult> SetLanguagePreferenceToUserState(DialogContext dc, System.Object options)
-        //{
-        //    await _languagePreference.SetAsync(dc.Context, "${user.languagePreference}");
-        //    await _userState.SaveChangesAsync(dc.Context, false);
-        //    return await dc.EndDialogAsync(options);
-        //}
 
         private static List<Dialog> WelcomeUserSteps() =>
             new List<Dialog>()

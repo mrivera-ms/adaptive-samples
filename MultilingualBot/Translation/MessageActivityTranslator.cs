@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Microsoft.Bot.Schema;
+using Microsoft.BotBuilderSamples.Translation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Bot.Schema;
-using Microsoft.BotBuilderSamples.Translation;
+using Newtonsoft.Json.Linq;
 
 namespace MultilingualBot.Translation
 {
@@ -39,20 +40,36 @@ namespace MultilingualBot.Translation
                 await TranslateCardActionsAsync(activity.SuggestedActions.Actions, targetLocale, cancellationToken);
             }
 
-            if (activity.Attachments.Any())
+            if (activity.Attachments != null && activity.Attachments.Any())
             {
+                IList<Attachment> attachments = new List<Attachment>();
+
                 foreach (var attachment in activity.Attachments)
                 {
                     switch (attachment.ContentType)
                     {
                         case HeroCard.ContentType:
-                            await TranslateHeroCardAsync((HeroCard) attachment.Content, targetLocale, cancellationToken);
+                            var heroCard = ((JObject)attachment.Content).ToObject<HeroCard>();
+                            var translatedCard = await TranslateHeroCardAsync(heroCard, targetLocale, cancellationToken);
+                            AddInAttachment(attachments, translatedCard, HeroCard.ContentType);
                             break;
                         default:
-                            throw new NotImplementedException();
+                            //No changes for unsupported types. Add your own translation methods as needed.
+                            attachments.Add(attachment);
+                            break;
                     }
                 }
+
+                activity.Attachments = attachments;
             }
+        }
+
+        private void AddInAttachment(IList<Attachment> attachments, HeroCard translatedCard, string attachmentType)
+        {
+            var attachment = new Attachment();
+            attachment.ContentType = attachmentType;
+            attachment.Content = translatedCard;
+            attachments.Add(attachment);
         }
 
         internal async Task TranslateMessageActivityAsync(IMessageActivity activity, string targetLocale, CancellationToken cancellationToken = default(CancellationToken))
@@ -68,19 +85,44 @@ namespace MultilingualBot.Translation
             return await _translator.TranslateAsync(text, targetLocale, cancellationToken);
         }
 
-        private async Task TranslateHeroCardAsync(HeroCard card, string targetLocale, CancellationToken cancellationToken = default)
+        private async Task<HeroCard> TranslateHeroCardAsync(HeroCard card, string targetLocale, CancellationToken cancellationToken = default)
         {
-            card.Title = await TranslateTextAsync(card.Title, targetLocale, cancellationToken);
-            card.Subtitle = await TranslateTextAsync(card.Subtitle, targetLocale, cancellationToken);
-            card.Text = await TranslateTextAsync(card.Text, targetLocale, cancellationToken);
-            await TranslateCardActionsAsync(card.Buttons, targetLocale, cancellationToken);
+            if (!string.IsNullOrEmpty(card.Title))
+            {
+                card.Title = await TranslateTextAsync(card.Title, targetLocale, cancellationToken);
+            }
+
+            if (!string.IsNullOrEmpty(card.Subtitle))
+            {
+                card.Subtitle = await TranslateTextAsync(card.Subtitle, targetLocale, cancellationToken);
+            }
+
+            if (!string.IsNullOrEmpty(card.Text))
+            {
+                card.Text = await TranslateTextAsync(card.Text, targetLocale, cancellationToken);
+            }
+
+            if (card.Buttons != null && card.Buttons.Any())
+            {
+                await TranslateCardActionsAsync(card.Buttons, targetLocale, cancellationToken);
+            }
+
+            return card;
         }
 
         private async Task TranslateCardActionsAsync(IEnumerable<CardAction> cardActions, string targetLocale, CancellationToken cancellationToken)
         {
             foreach (var cardAction in cardActions)
             {
-                cardAction.Text = await TranslateTextAsync(cardAction.Text, targetLocale, cancellationToken);
+                if( !string.IsNullOrEmpty(cardAction.Text))
+                {
+                    cardAction.Text = await TranslateTextAsync(cardAction.Text, targetLocale, cancellationToken);
+                }
+
+                if (!string.IsNullOrEmpty(cardAction.Title))
+                {
+                    cardAction.Title = await TranslateTextAsync(cardAction.Title, targetLocale, cancellationToken);
+                }
             }
         }
     }

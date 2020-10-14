@@ -58,9 +58,14 @@ namespace Microsoft.BotBuilderSamples.Translation
             if (translate)
             {
                 // This translates incoming messages from the user language to the default language that the bot understands.
+                // Does not translate locale information and intent words
                 if (turnContext.Activity.Type == ActivityTypes.Message)
                 {
-                    await _messageActivityTranslator.TranslateTextAsync(turnContext.Activity.Text, TranslationSettings.DefaultLanguage, cancellationToken);
+                    var text = turnContext.Activity.Text;
+                    if (text != "en" && text != "fr" && text != "es" && text != "it" && text != "hero")
+                    {
+                        turnContext.Activity.Text = await _messageActivityTranslator.TranslateTextAsync(turnContext.Activity.Text, TranslationSettings.DefaultLanguage, cancellationToken);
+                    }
                 }
             }
 

@@ -11,6 +11,7 @@ using Microsoft.Bot.Builder.Dialogs.Adaptive.Actions;
 using Microsoft.Bot.Builder.Dialogs.Adaptive.Conditions;
 using Microsoft.Bot.Builder.Dialogs.Adaptive.Generators;
 using Microsoft.Bot.Builder.Dialogs.Adaptive.Input;
+using Microsoft.Bot.Builder.Dialogs.Adaptive.Recognizers;
 using Microsoft.Bot.Builder.Dialogs.Adaptive.Templates;
 using Microsoft.Bot.Builder.LanguageGeneration;
 
@@ -26,28 +27,76 @@ namespace WelcomeBot.Dialogs
             var fullPath = Path.Combine(paths);
             _templates = Templates.ParseFile(fullPath);
 
+            Recognizer = new RegexRecognizer()
+            {
+                Intents = new List<IntentPattern>()
+                {
+                    new IntentPattern()
+                    {
+                        Intent = "ChangeLang",
+                        Pattern = "(language|speak|change)"
+                    },
+                    new IntentPattern()
+                    {
+                        Intent = "Help",
+                        Pattern = "(help|options)"
+                    },
+                    new IntentPattern()
+                    {
+                        Intent = "Hero",
+                        Pattern ="hero"
+                    }
+                }
+            };
+
             Triggers = new List<OnCondition>
             {
                 new OnConversationUpdateActivity()
                 {
                     Actions = WelcomeUserSteps()
                 },
-                new OnUnknownIntent()
+                new OnIntent()
                 {
-                    Actions = new List<Dialog>()
+                    Intent = "ChangeLang",
+                    Actions= new List<Dialog>()
                     {
                         new TextInput()
                         {
-                            Property = "user.LanguagePreference",
-                            Prompt = new ActivityTemplate("${LanguageChoicePrompt()}"),
                             AlwaysPrompt = true,
-                            InvalidPrompt = new ActivityTemplate("Sorry, I don't understand that. Please select one of the values."),
+                            Property = "dialog.LanguagePreference",
+                            Prompt = new ActivityTemplate("${LanguageChoicePrompt()}"),
+                            InvalidPrompt = new ActivityTemplate("${InvalidChoice()}"),
                             Validations = new List<BoolExpression>()
                             {
                                 new BoolExpression("this.value == 'en' || this.value == 'it' || this.value == 'fr' || this.value == 'es'")
                             }
                         },
-                        new SendActivity("Excellent: ${user.LanguagePreference} is a great choice."),
+                        new SetProperty()
+                        {
+                            Property= "user.LanguagePreference",
+                            Value = "=dialog.LanguagePreference"
+                        },
+                       new SendActivity("${ShowSelection()}"),
+                    }
+                },
+                new OnIntent()
+                {
+                    Intent = "Hero",
+                    Actions = new List<Dialog>() { new SendActivity("${HeroCard()}") }
+                },
+                new OnIntent()
+                {
+                    Intent = "Help",
+                    Actions = new List<Dialog>()
+                    {
+                        new SendActivity("${HelpInfo()}")
+                    }
+                },
+                new OnUnknownIntent()
+                {
+                    Actions = new List<Dialog>()
+                    {
+                        new SendActivity("You said: '${turn.Activity.Text}'"),
                     }
                 }
             };
@@ -69,7 +118,8 @@ namespace WelcomeBot.Dialogs
                             Condition = "$foreach.value.name != turn.activity.recipient.name",
                             Actions = new List<Dialog>()
                             {
-                                { new SendActivity("${AdaptiveCard()}") }
+                                new SendActivity("${AdaptiveCard()}"),
+                                new SendActivity("${HelpInfo()}")
                             }
                         }
                     }

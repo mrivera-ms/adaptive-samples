@@ -24,7 +24,7 @@ namespace WelcomeBot
                         logging.AddConsole();
                     });
 
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseStartup<Startup>();  
                 });
     }
 }

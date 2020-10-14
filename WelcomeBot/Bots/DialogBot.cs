@@ -7,7 +7,7 @@ using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Extensions.Logging;
 
-namespace WelcomeBot.Bots
+namespace Microsoft.BotBuilderSamples.Bots
 {
     public class DialogBot<T> : IBot
         where T : Dialog

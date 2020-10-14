@@ -13,7 +13,7 @@ using Microsoft.Extensions.Hosting;
 using WelcomeBot.Bots;
 using WelcomeBot.Dialogs;
 
-namespace WelcomeBot
+namespace Microsoft.BotBuilderSamples
 {
     public class Startup
     {

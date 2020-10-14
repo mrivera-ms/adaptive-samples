@@ -10,7 +10,7 @@ using Microsoft.Bot.Builder.Dialogs.Adaptive.Conditions;
 using Microsoft.Bot.Builder.Dialogs.Adaptive.Generators;
 using Microsoft.Bot.Builder.LanguageGeneration;
 
-namespace WelcomeBot.Dialogs
+namespace Microsoft.BotBuilderSamples.Dialogs
 {
     public class RootDialog : AdaptiveDialog
     {

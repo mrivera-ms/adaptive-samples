@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace WelcomeBot
+namespace Microsoft.BotBuilderSamples
 {
     public class Program
     {

@@ -6,7 +6,7 @@ using Microsoft.Bot.Builder.Dialogs.Adaptive;
 using Microsoft.Bot.Builder.Dialogs.Adaptive.Actions;
 using Microsoft.Bot.Builder.Dialogs.Adaptive.Conditions;
 
-namespace EmptyBot.Dialogs
+namespace Microsoft.BotBuilderSamples.Dialogs
 {
     public class RootDialog : AdaptiveDialog
     {
